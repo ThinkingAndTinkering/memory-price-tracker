@@ -136,7 +136,15 @@ Individual seeds: `npm run seed:prices`, `npm run seed:events`. One lane on dema
 - The legacy Amazon `source='scraped'` rows were purged from `prices.db`; re-seeding does not
   reintroduce them (seed only touches `source='estimated'`).
 - Recharts makes the JS bundle ~593kB (gzip 170kB) — fine for this app; code-split if it matters.
-- Not deployed yet. Render blueprint + a scheduled headless scrape are the obvious next step.
+- **Deployed on Render 2026-07-02: https://memory-price-tracker.onrender.com** (repo
+  ThinkingAndTinkering/memory-price-tracker, public). Node web service — build `npm install &&
+  npm install --prefix client && npm run build --prefix client`, start `node server/index.js`
+  (the server serves the built `client/dist`; free tier spins down → ~30s cold wake). The seeded
+  `prices.db` is committed so the dashboard renders live data on a fresh dyno. `server/index.js`
+  binds `process.env.PORT` (Render) → `SERVER_PORT` → 3002 fallback. Auto-deploys from `main`;
+  linked in "The Study" as Research card 12. NOTE: writes from the daily cron scrape don't persist
+  on Render's ephemeral disk — the committed seeded DB is what's served; a scheduled headless
+  scrape that commits refreshed data is still the obvious next step.
 
 ## Conventions
 - $/GB everywhere for retail (NAND $/TB ÷ 1000). Never average raw $/GB across DRAM and NAND
